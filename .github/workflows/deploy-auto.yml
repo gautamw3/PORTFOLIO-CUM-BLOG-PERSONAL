@@ -49,6 +49,7 @@ jobs:
             --targets "Key=instanceIds,Values=$INSTANCE_ID" \
             --parameters 'commands=[
               "set -e",
+              "export HOME=/home/ubuntu",
               "git config --global --add safe.directory /home/ubuntu/apps/PORTFOLIO-CUM-BLOG-PERSONAL",
               "cd /home/ubuntu/apps/PORTFOLIO-CUM-BLOG-PERSONAL",
               "git fetch origin",
