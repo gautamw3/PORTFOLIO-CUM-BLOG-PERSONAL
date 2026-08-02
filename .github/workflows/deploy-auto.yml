@@ -55,7 +55,7 @@ jobs:
               "git fetch origin",
               "git reset --hard origin/main",
               "/home/ubuntu/apps/.venv/bin/pip install -U pip",
-              "/home/ubuntu/apps/.venv/bin/pip install --no-cache-dir -r requirements.txt",
+              "/home/ubuntu/apps/.venv/bin/pip install -q --no-cache-dir -r requirements.txt",
               "/home/ubuntu/apps/.venv/bin/python manage.py migrate --noinput",
               "/home/ubuntu/apps/.venv/bin/python manage.py collectstatic --noinput",
               "sudo systemctl daemon-reload",
