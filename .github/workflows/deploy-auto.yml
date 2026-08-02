@@ -37,6 +37,7 @@ jobs:
 
       - name: Deploy to EC2 via AWS SSM
         id: deploy
+        if: ${{ env.AWS_REGION != '' && env.INSTANCE_ID != '' }}
         run: |
           COMMAND_ID=$(aws ssm send-command \
             --region $AWS_REGION \
