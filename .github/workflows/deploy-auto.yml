@@ -2,7 +2,8 @@ name: Django Auto CI/CD via AWS SSM
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -15,7 +16,7 @@ jobs:
       INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -23,38 +24,67 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -U pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Pytest
+      - name: Run Tests
         run: |
           source venv/bin/activate
           pytest
 
-      - name: Deploy to EC2 via AWS SSM
-        id: deploy
-        run: |
-          COMMAND_ID=$(aws ssm send-command \
-            --region $AWS_REGION \
-            --document-name "AWS-RunShellScript" \
-            --comment "CI/CD Deploy Django App" \
-            --targets "Key=instanceIds,Values=$INSTANCE_ID" \
-            --parameters 'commands=["/bin/bash /home/ubuntu/deploy.sh"]' \
-            --query "Command.CommandId" \
-            --output text)
-
-          echo "SSM command sent. ID: $COMMAND_ID"
-
-          # Optional: Wait and fetch the result (add retries if needed)
-          sleep 10
-          aws ssm list-command-invocations \
-            --command-id "$COMMAND_ID" \
-            --details \
-            --region "$AWS_REGION"
+      - name: Deploy to EC2 via AWS Systems Manager
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+
+          COMMAND_ID=$(aws ssm send-command \
+            --region "$AWS_REGION" \
+            --document-name "AWS-RunShellScript" \
+            --comment "CI/CD Deploy Django Application" \
+            --targets "Key=instanceIds,Values=$INSTANCE_ID" \
+            --parameters 'commands=[
+              "set -e",
+              "cd /home/ubuntu/apps/PORTFOLIO-CUM-BLOG-PERSONAL",
+              "git fetch origin",
+              "git reset --hard origin/main",
+              "source /home/ubuntu/apps/.venv/bin/activate",
+              "pip install -r requirements.txt",
+              "python manage.py migrate --noinput",
+              "python manage.py collectstatic --noinput",
+              "sudo systemctl daemon-reload",
+              "sudo systemctl restart gunicorn",
+              "sudo systemctl status gunicorn --no-pager"
+            ]' \
+            --query "Command.CommandId" \
+            --output text)
+
+          echo "Command ID: $COMMAND_ID"
+
+          echo "Waiting for deployment to finish..."
+          sleep 15
+
+          STATUS=$(aws ssm get-command-invocation \
+            --command-id "$COMMAND_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --region "$AWS_REGION" \
+            --query "Status" \
+            --output text)
+
+          echo "Deployment Status: $STATUS"
+
+          aws ssm get-command-invocation \
+            --command-id "$COMMAND_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --region "$AWS_REGION"
+
+          if [ "$STATUS" != "Success" ]; then
+            echo "Deployment failed."
+            exit 1
+          fi
+
+          echo "Deployment completed successfully."
