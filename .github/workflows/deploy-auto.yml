@@ -54,10 +54,9 @@ jobs:
               "cd /home/ubuntu/apps/PORTFOLIO-CUM-BLOG-PERSONAL",
               "git fetch origin",
               "git reset --hard origin/main",
-              "source /home/ubuntu/apps/.venv/bin/activate",
-              "pip install -r requirements.txt",
-              "python manage.py migrate --noinput",
-              "python manage.py collectstatic --noinput",
+              "/home/ubuntu/apps/.venv/bin/pip install -r requirements.txt",
+              "/home/ubuntu/apps/.venv/bin/python manage.py migrate --noinput",
+              "/home/ubuntu/apps/.venv/bin/python manage.py collectstatic --noinput",
               "sudo systemctl daemon-reload",
               "sudo systemctl restart gunicorn",
               "sudo systemctl status gunicorn --no-pager"
