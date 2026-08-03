@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-ci-placeholder")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.environ.get("DEBUG")) == "1"
+DEBUG = str(os.environ.get("DEBUG", "0")) == "1"
 
 ALLOWED_HOSTS = (
     os.environ.get("ALLOWED_HOSTS").split(",")
@@ -32,12 +32,12 @@ ALLOWED_HOSTS = (
     else []
 )
 
-if DEBUG:
+if DEBUG or not os.environ.get("AWS_STORAGE_BUCKET_NAME"):
     # - Local Config
-    STATIC_URL = os.environ.get("STATIC_URL")
-    STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get("STATIC_ROOT"))
-    MEDIA_URL = os.path.join(BASE_DIR, os.environ.get("MEDIA_URL"))
-    MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get("MEDIA_ROOT"))
+    STATIC_URL = os.environ.get("STATIC_URL", "/static/")
+    STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get("STATIC_ROOT", "staticfiles"))
+    MEDIA_URL = os.environ.get("MEDIA_URL", "/media/")
+    MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get("MEDIA_ROOT", "media"))
 else:
     # - S3 Config
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -102,7 +102,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = os.environ.get("ROOT_URLCONF")
+ROOT_URLCONF = os.environ.get("ROOT_URLCONF", "portfolio_cum_blog.urls")
 
 TEMPLATES = [
     {
@@ -183,20 +183,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = os.environ.get("LANGUAGE_CODE")
+LANGUAGE_CODE = os.environ.get("LANGUAGE_CODE", "en-us")
 
-TIME_ZONE = os.environ.get("TIME_ZONE")
+TIME_ZONE = os.environ.get("TIME_ZONE", "UTC")
 
-USE_I18N = str(os.environ.get("USE_I18N")) == "1"
+USE_I18N = str(os.environ.get("USE_I18N", "1")) == "1"
 
-USE_TZ = str(os.environ.get("USE_TZ")) == "1"
+USE_TZ = str(os.environ.get("USE_TZ", "1")) == "1"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CRISPY_TEMPLATE_PACK = os.environ.get("CRISPY_TEMPLATE_PACK")
+CRISPY_TEMPLATE_PACK = os.environ.get("CRISPY_TEMPLATE_PACK", "bootstrap4")
 
 DEFAULT_USER = os.environ.get("DEFAULT_USER")
 
