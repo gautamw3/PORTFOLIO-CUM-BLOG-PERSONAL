@@ -8,7 +8,6 @@ from django.test import RequestFactory
 
 from portfolio import views
 from portfolio.models import (
-    ClientLead,
     ClientProject,
     NewClient,
     PortfolioUser,
@@ -165,7 +164,11 @@ def test_index_exception_branch(rf, rendered, monkeypatch, data_setup):
     request = rf.get("/")
     request.user = data_setup.user
 
-    monkeypatch.setattr(views.User.objects, "get", lambda **kwargs: (_ for _ in ()).throw(TypeError("boom")))
+    monkeypatch.setattr(
+        views.User.objects,
+        "get",
+        lambda **kwargs: (_ for _ in ()).throw(TypeError("boom")),
+    )
 
     result = views.index(request)
     assert result["context"]["page_title"] == "Home"
@@ -208,7 +211,9 @@ def test_new_client_feed_branches(rf):
     missing_payload = json.loads(views.new_client_feed(missing_req).content.decode())
     assert missing_payload["response"] == "error"
 
-    method_payload = json.loads(views.new_client_feed(rf.get("/new_client_feed/")).content.decode())
+    method_payload = json.loads(
+        views.new_client_feed(rf.get("/new_client_feed/")).content.decode()
+    )
     assert method_payload["response"] == "error"
 
 

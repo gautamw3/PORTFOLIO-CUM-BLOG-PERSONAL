@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0016_clientlead'),
+        ("portfolio", "0016_clientlead"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='clientlead',
-            name='file_supporting_the_message',
-            field=models.FileField(blank=True, null=True, upload_to='portfolio/client_lead'),
+            model_name="clientlead",
+            name="file_supporting_the_message",
+            field=models.FileField(
+                blank=True, null=True, upload_to="portfolio/client_lead"
+            ),
         ),
     ]

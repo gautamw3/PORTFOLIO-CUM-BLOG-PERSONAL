@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0011_review'),
+        ("portfolio", "0011_review"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='review',
-            name='review_description',
-            field=models.TextField(default='Amazing service. Gautam has no doubt exceptional skill set and the enough work experience to deliver what is expected by his client.'),
+            model_name="review",
+            name="review_description",
+            field=models.TextField(
+                default="Amazing service. Gautam has no doubt exceptional skill set and the enough work experience to deliver what is expected by his client."
+            ),
         ),
     ]

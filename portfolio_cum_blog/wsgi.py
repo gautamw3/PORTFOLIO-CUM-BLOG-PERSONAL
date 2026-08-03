@@ -22,6 +22,6 @@ if ENV_FILE_PATH.exists():
 else:
     print("Environment file not found. Please make sure it is there | WSGI:error")
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio_cum_blog.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio_cum_blog.settings")
 
 application = get_wsgi_application()

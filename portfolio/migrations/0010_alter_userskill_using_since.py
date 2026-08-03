@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0009_alter_userskill_rating_out_of_five_and_more'),
+        ("portfolio", "0009_alter_userskill_rating_out_of_five_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userskill',
-            name='using_since',
+            model_name="userskill",
+            name="using_since",
             field=models.DateField(),
         ),
     ]

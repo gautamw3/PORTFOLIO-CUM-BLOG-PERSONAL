@@ -8,34 +8,55 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='PortfolioUser',
+            name="PortfolioUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=30)),
-                ('last_name', models.CharField(max_length=20)),
-                ('user_email', models.EmailField(max_length=50)),
-                ('user_mobile', models.CharField(max_length=10)),
-                ('user_password', models.CharField(max_length=50)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.CharField(max_length=30)),
+                ("last_name", models.CharField(max_length=20)),
+                ("user_email", models.EmailField(max_length=50)),
+                ("user_mobile", models.CharField(max_length=10)),
+                ("user_password", models.CharField(max_length=50)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Portfolio User',
-                'verbose_name_plural': 'Portfolio Users',
+                "verbose_name": "Portfolio User",
+                "verbose_name_plural": "Portfolio Users",
             },
         ),
         migrations.CreateModel(
-            name='BlogUser',
+            name="BlogUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('portfolio_user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='portfolio.portfoliouser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "portfolio_user_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="portfolio.portfoliouser",
+                    ),
+                ),
             ],
         ),
     ]

@@ -186,9 +186,7 @@ def index(request):
     template = "portfolio/index.html"
     try:
         obj_user = get_global_user()
-        obj_portfolio_user = PortfolioUser.objects.get(
-                pk=obj_user.user_portfolio.id
-            )
+        obj_portfolio_user = PortfolioUser.objects.get(pk=obj_user.user_portfolio.id)
         email = obj_user.email
         mobile = obj_portfolio_user.mobile
         customer_reviews = get_customer_reviews()
@@ -365,7 +363,9 @@ def tech_details(request, tech_id):
             obj_tech_details = UserSkill.objects.get(
                 user__id=obj_user.id, skill__id=tech_id
             )
-            obj_social_media_links = get_social_media_links(obj_tech_details.user.user_portfolio.id)
+            obj_social_media_links = get_social_media_links(
+                obj_tech_details.user.user_portfolio.id
+            )
             context = embed_social_media_links_to_context(
                 context, obj_social_media_links
             )
@@ -383,21 +383,21 @@ def tech_details(request, tech_id):
                     f"{obj_tech_details.skill.category_item_name} "
                     f"{obj_tech_details.skill_category.get_category_name_display()}"
                 )
-            context["page_details"]["breadcrumb_mid_item"] = (
-                obj_tech_details.skill.category_item_name
-            )
+            context["page_details"][
+                "breadcrumb_mid_item"
+            ] = obj_tech_details.skill.category_item_name
             context["page_details"]["summary"] = obj_tech_details.summary
             context["page_details"]["description"] = obj_tech_details.description
             context["page_details"]["rating"] = [
                 i for i in range(int(obj_tech_details.rating_out_of_five))
             ]
-            context["page_details"]["total_experience"] = (
-                obj_tech_details.get_total_experience_in_year_display()
-            )
+            context["page_details"][
+                "total_experience"
+            ] = obj_tech_details.get_total_experience_in_year_display()
             context["page_details"]["last_used"] = obj_tech_details.last_used
-            context["page_details"]["image"] = (
-                obj_tech_details.skill.category_item_image.url
-            )
+            context["page_details"][
+                "image"
+            ] = obj_tech_details.skill.category_item_image.url
         else:
             logger.warning(
                 "Tech details endpoint called with invalid HTTP method=%s",
@@ -555,7 +555,9 @@ def about_me(request):
                 if obj_user.user_portfolio.profile_photo
                 else "#"
             )
-            obj_resume = Resume.objects.filter(user_id=obj_user.user_portfolio.id).first()
+            obj_resume = Resume.objects.filter(
+                user_id=obj_user.user_portfolio.id
+            ).first()
             context["resume_url"] = obj_resume.resume_file.url if obj_resume else "#"
             customer_reviews = get_customer_reviews()
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)

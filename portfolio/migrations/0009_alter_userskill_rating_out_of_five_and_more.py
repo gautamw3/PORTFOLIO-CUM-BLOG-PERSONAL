@@ -6,18 +6,46 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0008_userskill_rating_out_of_five_and_more'),
+        ("portfolio", "0008_userskill_rating_out_of_five_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userskill',
-            name='rating_out_of_five',
-            field=models.CharField(choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], max_length=1),
+            model_name="userskill",
+            name="rating_out_of_five",
+            field=models.CharField(
+                choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5")],
+                max_length=1,
+            ),
         ),
         migrations.AlterField(
-            model_name='userskill',
-            name='total_experience_in_year',
-            field=models.CharField(choices=[('1', '1 Year'), ('2', '2 Years'), ('3', '3 Years'), ('4', '4 Years'), ('5', '5 Years'), ('6', '6 Years'), ('7', '7 Years'), ('8', '8 Years'), ('9', '9 Years'), ('10', '10 Years'), ('11', '11 Years'), ('12', '12 Years'), ('13', '13 Years'), ('14', '14 Years'), ('15', '15 Years'), ('16', '16 Years'), ('17', '17 Years'), ('18', '18 Years'), ('19', '19 Years'), ('20', '20 Years'), ('20+', '20+ Years')], max_length=10),
+            model_name="userskill",
+            name="total_experience_in_year",
+            field=models.CharField(
+                choices=[
+                    ("1", "1 Year"),
+                    ("2", "2 Years"),
+                    ("3", "3 Years"),
+                    ("4", "4 Years"),
+                    ("5", "5 Years"),
+                    ("6", "6 Years"),
+                    ("7", "7 Years"),
+                    ("8", "8 Years"),
+                    ("9", "9 Years"),
+                    ("10", "10 Years"),
+                    ("11", "11 Years"),
+                    ("12", "12 Years"),
+                    ("13", "13 Years"),
+                    ("14", "14 Years"),
+                    ("15", "15 Years"),
+                    ("16", "16 Years"),
+                    ("17", "17 Years"),
+                    ("18", "18 Years"),
+                    ("19", "19 Years"),
+                    ("20", "20 Years"),
+                    ("20+", "20+ Years"),
+                ],
+                max_length=10,
+            ),
         ),
     ]

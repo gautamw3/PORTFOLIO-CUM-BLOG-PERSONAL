@@ -7,34 +7,61 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0013_newclient'),
+        ("portfolio", "0013_newclient"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='portfoliouser',
-            name='work_days',
-            field=models.CharField(choices=[(1, 'Mon to Friday'), (2, 'Mon to Saturday')], default=1, max_length=1),
+            model_name="portfoliouser",
+            name="work_days",
+            field=models.CharField(
+                choices=[(1, "Mon to Friday"), (2, "Mon to Saturday")],
+                default=1,
+                max_length=1,
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='work_shift',
-            field=models.CharField(choices=[(1, '9 AM to 6 PM'), (2, '10 AM to 7 PM'), (3, '2:30 PM to 11:30 PM')], default=2, max_length=1),
+            model_name="portfoliouser",
+            name="work_shift",
+            field=models.CharField(
+                choices=[
+                    (1, "9 AM to 6 PM"),
+                    (2, "10 AM to 7 PM"),
+                    (3, "2:30 PM to 11:30 PM"),
+                ],
+                default=2,
+                max_length=1,
+            ),
             preserve_default=False,
         ),
         migrations.CreateModel(
-            name='PortfolioUserAddress',
+            name="PortfolioUserAddress",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('country', models.CharField(max_length=50)),
-                ('state', models.CharField(max_length=50)),
-                ('city', models.CharField(max_length=50)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_address', to='portfolio.portfoliouser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("country", models.CharField(max_length=50)),
+                ("state", models.CharField(max_length=50)),
+                ("city", models.CharField(max_length=50)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="user_address",
+                        to="portfolio.portfoliouser",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Portfolio User Address',
-                'verbose_name_plural': 'Portfolio User Addresses',
+                "verbose_name": "Portfolio User Address",
+                "verbose_name_plural": "Portfolio User Addresses",
             },
         ),
     ]

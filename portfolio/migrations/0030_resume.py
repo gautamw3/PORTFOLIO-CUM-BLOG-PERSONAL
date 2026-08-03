@@ -9,22 +9,37 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('portfolio', '0029_alter_clientlead_message_and_more'),
+        ("portfolio", "0029_alter_clientlead_message_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Resume',
+            name="Resume",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('resume_file', models.FileField(upload_to='portfolio/resume')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_resume', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("resume_file", models.FileField(upload_to="portfolio/resume")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="user_resume",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Resume',
-                'verbose_name_plural': 'Resumes',
+                "verbose_name": "Resume",
+                "verbose_name_plural": "Resumes",
             },
         ),
     ]

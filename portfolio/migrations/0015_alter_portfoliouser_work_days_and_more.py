@@ -6,18 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0014_portfoliouser_work_days_portfoliouser_work_shift_and_more'),
+        ("portfolio", "0014_portfoliouser_work_days_portfoliouser_work_shift_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='portfoliouser',
-            name='work_days',
-            field=models.CharField(choices=[('1', 'Mon to Friday'), ('2', 'Mon to Saturday')], max_length=1),
+            model_name="portfoliouser",
+            name="work_days",
+            field=models.CharField(
+                choices=[("1", "Mon to Friday"), ("2", "Mon to Saturday")], max_length=1
+            ),
         ),
         migrations.AlterField(
-            model_name='portfoliouser',
-            name='work_shift',
-            field=models.CharField(choices=[('1', '9 AM to 6 PM'), ('2', '10 AM to 7 PM'), ('3', '2:30 PM to 11:30 PM')], max_length=1),
+            model_name="portfoliouser",
+            name="work_shift",
+            field=models.CharField(
+                choices=[
+                    ("1", "9 AM to 6 PM"),
+                    ("2", "10 AM to 7 PM"),
+                    ("3", "2:30 PM to 11:30 PM"),
+                ],
+                max_length=1,
+            ),
         ),
     ]

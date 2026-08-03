@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+python_bin=""
+
+for candidate in "$repo_root/.venv/bin/python" "$(command -v python3 || true)" "$(command -v python || true)"; do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+        python_bin="$candidate"
+        break
+    fi
+done
+
+if [ -z "$python_bin" ]; then
+    echo "No Python interpreter found for pre-push checks." >&2
+    exit 1
+fi
+
+cd "$repo_root"
+
+"$python_bin" -m black --check .
+"$python_bin" -m pytest -q

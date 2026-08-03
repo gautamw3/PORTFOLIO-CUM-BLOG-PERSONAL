@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0030_resume'),
+        ("portfolio", "0030_resume"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='resume',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_resume', to='portfolio.portfoliouser'),
+            model_name="resume",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_resume",
+                to="portfolio.portfoliouser",
+            ),
         ),
     ]

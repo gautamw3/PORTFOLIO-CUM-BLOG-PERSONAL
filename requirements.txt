@@ -4,22 +4,14 @@
 #
 #    pip-compile requirements.in
 #
-asgiref==3.11.1
+asgiref==3.12.1
     # via django
-boto3==1.43.46
+boto3==1.43.62
     # via -r requirements.in
-botocore==1.43.46
+botocore==1.43.62
     # via
     #   boto3
     #   s3transfer
-build==1.5.1
-    # via
-    #   -r requirements.in
-    #   pip-tools
-click==8.4.2
-    # via
-    #   -r requirements.in
-    #   pip-tools
 crispy-bootstrap4==2026.2
     # via -r requirements.in
 django==5.2.16
@@ -31,55 +23,33 @@ django==5.2.16
     #   django-storages
 django-ckeditor-5==0.2.20
     # via -r requirements.in
-django-crispy-forms==2.6
+django-crispy-forms==2.7
     # via
     #   -r requirements.in
     #   crispy-bootstrap4
 django-dotenv==1.4.2
     # via -r requirements.in
-django-froala-editor==5.3.0
+django-froala-editor==5.3.1
     # via -r requirements.in
 django-storages==1.14.6
     # via -r requirements.in
 gunicorn==26.0.0
     # via -r requirements.in
-iniconfig==2.3.0
-    # via pytest
 jmespath==1.1.0
     # via
     #   boto3
     #   botocore
 packaging==26.2
-    # via
-    #   build
-    #   gunicorn
-    #   pytest
-    #   wheel
+    # via gunicorn
 pillow==12.3.0
     # via
     #   -r requirements.in
     #   django-ckeditor-5
-pip-tools==7.5.3
-    # via -r requirements.in
-pluggy==1.6.0
-    # via pytest
 psycopg2-binary==2.9.12
-    # via -r requirements.in
-pygments==2.20.0
-    # via pytest
-pyproject-hooks==1.2.0
-    # via
-    #   build
-    #   pip-tools
-pytest==9.1.1
-    # via
-    #   -r requirements.in
-    #   pytest-django
-pytest-django==4.12.0
     # via -r requirements.in
 python-dateutil==2.9.0.post0
     # via botocore
-s3transfer==0.19.1
+s3transfer==0.19.2
     # via boto3
 six==1.17.0
     # via python-dateutil
@@ -87,9 +57,3 @@ sqlparse==0.5.5
     # via django
 urllib3==2.7.0
     # via botocore
-wheel==0.47.0
-    # via pip-tools
-
-# The following packages are considered to be unsafe in a requirements file:
-# pip
-# setuptools

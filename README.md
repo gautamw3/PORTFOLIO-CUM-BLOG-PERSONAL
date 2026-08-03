@@ -171,6 +171,19 @@ Run tests:
 pytest -q
 ```
 
+## Git Hook Setup
+
+This repository includes a pre-push hook that runs Black in check mode and the test suite before each push.
+
+Enable it once per clone:
+
+```bash
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-push
+```
+
+After that, every `git push` will stop if formatting or tests fail.
+
 ## CI/CD Setup and Toggle Guide
 
 This repository now uses two workflow modes:

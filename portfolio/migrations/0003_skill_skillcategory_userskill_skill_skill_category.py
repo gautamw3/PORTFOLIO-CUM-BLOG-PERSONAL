@@ -9,57 +9,119 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('portfolio', '0002_rename_user_mobile_portfoliouser_mobile_and_more'),
+        ("portfolio", "0002_rename_user_mobile_portfoliouser_mobile_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Skill',
+            name="Skill",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('category_item_name', models.CharField(max_length=100)),
-                ('category_item_image', models.ImageField(upload_to='portfolio/skill_images')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("category_item_name", models.CharField(max_length=100)),
+                (
+                    "category_item_image",
+                    models.ImageField(upload_to="portfolio/skill_images"),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Skill',
-                'verbose_name_plural': 'Skills',
+                "verbose_name": "Skill",
+                "verbose_name_plural": "Skills",
             },
         ),
         migrations.CreateModel(
-            name='SkillCategory',
+            name="SkillCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('category_name', models.CharField(choices=[('PLBE', 'Programming languages(Backend)'), ('PLFE', 'Programming languages(Frontend)'), ('DBMS', 'Databases'), ('OPRS', 'Operating systems'), ('MCHL', 'Machine learning'), ('NLPR', 'Natural language processing'), ('WEBT', 'Web Technologies')], max_length=4)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "category_name",
+                    models.CharField(
+                        choices=[
+                            ("PLBE", "Programming languages(Backend)"),
+                            ("PLFE", "Programming languages(Frontend)"),
+                            ("DBMS", "Databases"),
+                            ("OPRS", "Operating systems"),
+                            ("MCHL", "Machine learning"),
+                            ("NLPR", "Natural language processing"),
+                            ("WEBT", "Web Technologies"),
+                        ],
+                        max_length=4,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Skill Category',
-                'verbose_name_plural': 'Skill Categories',
+                "verbose_name": "Skill Category",
+                "verbose_name_plural": "Skill Categories",
             },
         ),
         migrations.CreateModel(
-            name='UserSkill',
+            name="UserSkill",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('summary', models.CharField(max_length=222)),
-                ('description', models.TextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('skill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='portfolio.skill')),
-                ('skill_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='portfolio.skillcategory')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("summary", models.CharField(max_length=222)),
+                ("description", models.TextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "skill",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="portfolio.skill",
+                    ),
+                ),
+                (
+                    "skill_category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="portfolio.skillcategory",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'User Skill',
-                'verbose_name_plural': 'User Skills',
+                "verbose_name": "User Skill",
+                "verbose_name_plural": "User Skills",
             },
         ),
         migrations.AddField(
-            model_name='skill',
-            name='skill_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='portfolio.skillcategory'),
+            model_name="skill",
+            name="skill_category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="portfolio.skillcategory",
+            ),
         ),
     ]
