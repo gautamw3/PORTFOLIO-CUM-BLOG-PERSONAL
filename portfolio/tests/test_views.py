@@ -8,7 +8,6 @@ from django.test import RequestFactory
 
 from portfolio import views
 from portfolio.models import (
-    ClientLead,
     ClientProject,
     NewClient,
     PortfolioUser,
