@@ -59,8 +59,7 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install             black==24.10.0             ruff==0.6.9             bandit==1.7.10             pip-audit==2.8.0
+          pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
@@ -108,7 +107,7 @@ jobs:
       - name: Dependency Vulnerability Audit
         run: |
           . .venv/bin/activate
-          pip-audit
+          pip-audit -r requirements.txt
 
       - name: Secret Detection
         run: |
