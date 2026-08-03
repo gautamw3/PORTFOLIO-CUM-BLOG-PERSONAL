@@ -62,11 +62,10 @@ jobs:
           pip install -r requirements.txt
           pip install             black==24.10.0             ruff==0.6.9             bandit==1.7.10             pip-audit==2.8.0
 
-      - name: Install Gitleaks
-        run: |
-          wget -q https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_linux_x64.tar.gz
-          tar -xzf gitleaks_linux_x64.tar.gz
-          sudo mv gitleaks /usr/local/bin/
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Dependency Compatibility
         run: |
@@ -106,7 +105,7 @@ jobs:
 
       - name: Secret Detection
         run: |
-          gitleaks detect --source . --verbose
+          gitleaks detect --source .
 
       - name: Quality Summary
         if: success()
