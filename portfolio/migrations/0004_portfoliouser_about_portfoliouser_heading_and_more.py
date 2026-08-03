@@ -6,32 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0003_skill_skillcategory_userskill_skill_skill_category'),
+        ("portfolio", "0003_skill_skillcategory_userskill_skill_skill_category"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='portfoliouser',
-            name='about',
+            model_name="portfoliouser",
+            name="about",
             field=models.TextField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='heading',
+            model_name="portfoliouser",
+            name="heading",
             field=models.CharField(default=1, max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='headline',
+            model_name="portfoliouser",
+            name="headline",
             field=models.CharField(default=1, max_length=222),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='profile_photo',
-            field=models.ImageField(default=1, upload_to='portfolio/profile_photo'),
+            model_name="portfoliouser",
+            name="profile_photo",
+            field=models.ImageField(default=1, upload_to="portfolio/profile_photo"),
             preserve_default=False,
         ),
     ]

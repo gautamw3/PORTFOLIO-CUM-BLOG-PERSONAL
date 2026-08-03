@@ -6,23 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0010_alter_userskill_using_since'),
+        ("portfolio", "0010_alter_userskill_using_since"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Review',
+            name="Review",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reviewer_name', models.CharField(max_length=100)),
-                ('reviewer_rating', models.CharField(choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], max_length=1)),
-                ('review_description', models.TextField(default='fAmazing service. Gautam has no doubt exceptional skill set and the enough work experience to deliver what is expected by his client.')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reviewer_name", models.CharField(max_length=100)),
+                (
+                    "reviewer_rating",
+                    models.CharField(
+                        choices=[
+                            ("1", "1"),
+                            ("2", "2"),
+                            ("3", "3"),
+                            ("4", "4"),
+                            ("5", "5"),
+                        ],
+                        max_length=1,
+                    ),
+                ),
+                (
+                    "review_description",
+                    models.TextField(
+                        default="fAmazing service. Gautam has no doubt exceptional skill set and the enough work experience to deliver what is expected by his client."
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Customer Review',
-                'verbose_name_plural': 'Customer Reviews',
+                "verbose_name": "Customer Review",
+                "verbose_name_plural": "Customer Reviews",
             },
         ),
     ]

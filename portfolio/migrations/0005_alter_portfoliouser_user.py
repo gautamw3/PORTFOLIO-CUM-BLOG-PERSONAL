@@ -9,13 +9,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('portfolio', '0004_portfoliouser_about_portfoliouser_heading_and_more'),
+        ("portfolio", "0004_portfoliouser_about_portfoliouser_heading_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='portfoliouser',
-            name='user',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_portfolio', to=settings.AUTH_USER_MODEL),
+            model_name="portfoliouser",
+            name="user",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_portfolio",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

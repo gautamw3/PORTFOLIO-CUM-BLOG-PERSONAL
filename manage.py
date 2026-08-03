@@ -8,7 +8,7 @@ import dotenv
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio_cum_blog.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio_cum_blog.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -20,7 +20,7 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
-    if os.path.exists('.env'):
+if __name__ == "__main__":
+    if os.path.exists(".env"):
         dotenv.read_dotenv()
     main()

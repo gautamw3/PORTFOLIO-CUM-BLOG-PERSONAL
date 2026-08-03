@@ -7,41 +7,86 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0007_alter_skillcategory_category_name'),
+        ("portfolio", "0007_alter_skillcategory_category_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userskill',
-            name='rating_out_of_five',
-            field=models.CharField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=4, max_length=1),
+            model_name="userskill",
+            name="rating_out_of_five",
+            field=models.CharField(
+                choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+                default=4,
+                max_length=1,
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='userskill',
-            name='total_experience_in_year',
-            field=models.CharField(choices=[(1, '1 Year'), (2, '2 Years'), (3, '3 Years'), (4, '4 Years'), (5, '5 Years'), (6, '6 Years'), (7, '7 Years'), (8, '8 Years'), (9, '9 Years'), (10, '10 Years'), (11, '11 Years'), (12, '12 Years'), (13, '13 Years'), (14, '14 Years'), (15, '15 Years'), (16, '16 Years'), (17, '17 Years'), (18, '18 Years'), (19, '19 Years'), (20, '20 Years'), ('20+', '20+ Years')], default=5, max_length=10),
+            model_name="userskill",
+            name="total_experience_in_year",
+            field=models.CharField(
+                choices=[
+                    (1, "1 Year"),
+                    (2, "2 Years"),
+                    (3, "3 Years"),
+                    (4, "4 Years"),
+                    (5, "5 Years"),
+                    (6, "6 Years"),
+                    (7, "7 Years"),
+                    (8, "8 Years"),
+                    (9, "9 Years"),
+                    (10, "10 Years"),
+                    (11, "11 Years"),
+                    (12, "12 Years"),
+                    (13, "13 Years"),
+                    (14, "14 Years"),
+                    (15, "15 Years"),
+                    (16, "16 Years"),
+                    (17, "17 Years"),
+                    (18, "18 Years"),
+                    (19, "19 Years"),
+                    (20, "20 Years"),
+                    ("20+", "20+ Years"),
+                ],
+                default=5,
+                max_length=10,
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='userskill',
-            name='using_since',
+            model_name="userskill",
+            name="using_since",
             field=models.DateField(auto_created=True, auto_now=True),
         ),
         migrations.CreateModel(
-            name='PortfolioUserSocialMediaLink',
+            name="PortfolioUserSocialMediaLink",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('linkedin', models.CharField(max_length=222)),
-                ('tweeter', models.CharField(max_length=222)),
-                ('instagram', models.CharField(max_length=222)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_social_links', to='portfolio.portfoliouser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("linkedin", models.CharField(max_length=222)),
+                ("tweeter", models.CharField(max_length=222)),
+                ("instagram", models.CharField(max_length=222)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="user_social_links",
+                        to="portfolio.portfoliouser",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Social media link',
-                'verbose_name_plural': 'Social media links',
+                "verbose_name": "Social media link",
+                "verbose_name_plural": "Social media links",
             },
         ),
     ]

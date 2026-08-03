@@ -7,33 +7,33 @@ import django_ckeditor_5.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0028_rename_using_since_userskill_last_used'),
+        ("portfolio", "0028_rename_using_since_userskill_last_used"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='clientlead',
-            name='message',
+            model_name="clientlead",
+            name="message",
             field=django_ckeditor_5.fields.CKEditor5Field(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='clientproject',
-            name='project_description',
+            model_name="clientproject",
+            name="project_description",
             field=django_ckeditor_5.fields.CKEditor5Field(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='portfoliouser',
-            name='about',
+            model_name="portfoliouser",
+            name="about",
             field=django_ckeditor_5.fields.CKEditor5Field(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='review',
-            name='review_description',
+            model_name="review",
+            name="review_description",
             field=django_ckeditor_5.fields.CKEditor5Field(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='userskill',
-            name='description',
+            model_name="userskill",
+            name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(blank=True, null=True),
         ),
     ]

@@ -6,25 +6,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0015_alter_portfoliouser_work_days_and_more'),
+        ("portfolio", "0015_alter_portfoliouser_work_days_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ClientLead',
+            name="ClientLead",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('client_name', models.CharField(max_length=100)),
-                ('client_email', models.EmailField(max_length=100)),
-                ('subject', models.CharField(max_length=222)),
-                ('message', models.TextField()),
-                ('file_supporting_the_message', models.FileField(upload_to='portfolio/client_lead')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("client_name", models.CharField(max_length=100)),
+                ("client_email", models.EmailField(max_length=100)),
+                ("subject", models.CharField(max_length=222)),
+                ("message", models.TextField()),
+                (
+                    "file_supporting_the_message",
+                    models.FileField(upload_to="portfolio/client_lead"),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Client lead',
-                'verbose_name_plural': 'Client leads',
+                "verbose_name": "Client lead",
+                "verbose_name_plural": "Client leads",
             },
         ),
     ]

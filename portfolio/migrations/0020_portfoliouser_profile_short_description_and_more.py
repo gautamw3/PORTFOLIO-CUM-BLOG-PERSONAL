@@ -6,25 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0019_alter_portfoliouser_about_and_more'),
+        ("portfolio", "0019_alter_portfoliouser_about_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='portfoliouser',
-            name='profile_short_description',
+            model_name="portfoliouser",
+            name="profile_short_description",
             field=models.CharField(default=1, max_length=222),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='role',
+            model_name="portfoliouser",
+            name="role",
             field=models.CharField(default=1, max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='portfoliousersocialmedialink',
-            name='github',
+            model_name="portfoliousersocialmedialink",
+            name="github",
             field=models.CharField(default=1, max_length=222),
             preserve_default=False,
         ),

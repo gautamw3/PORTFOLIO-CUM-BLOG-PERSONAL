@@ -6,13 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0031_alter_resume_user'),
+        ("portfolio", "0031_alter_resume_user"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='skillcategory',
-            name='category_name',
-            field=models.CharField(choices=[('PLBE', 'Programming languages'), ('DBMS', 'Databases'), ('OPRS', 'Operating systems'), ('MCHL', 'Machine learning'), ('NLPR', 'Natural language processing'), ('WEBT', 'Web Technologies'), ('DVPS', 'DevOps'), ('VCS', 'Version Control System'), ('AGIL', 'Agile Development Tools')], max_length=4),
+            model_name="skillcategory",
+            name="category_name",
+            field=models.CharField(
+                choices=[
+                    ("PLBE", "Programming languages"),
+                    ("DBMS", "Databases"),
+                    ("OPRS", "Operating systems"),
+                    ("MCHL", "Machine learning"),
+                    ("NLPR", "Natural language processing"),
+                    ("WEBT", "Web Technologies"),
+                    ("DVPS", "DevOps"),
+                    ("VCS", "Version Control System"),
+                    ("AGIL", "Agile Development Tools"),
+                ],
+                max_length=4,
+            ),
         ),
     ]

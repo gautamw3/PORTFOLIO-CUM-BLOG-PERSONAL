@@ -9,43 +9,47 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('portfolio', '0001_initial'),
+        ("portfolio", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='portfoliouser',
-            old_name='user_mobile',
-            new_name='mobile',
+            model_name="portfoliouser",
+            old_name="user_mobile",
+            new_name="mobile",
         ),
         migrations.RemoveField(
-            model_name='portfoliouser',
-            name='first_name',
+            model_name="portfoliouser",
+            name="first_name",
         ),
         migrations.RemoveField(
-            model_name='portfoliouser',
-            name='last_name',
+            model_name="portfoliouser",
+            name="last_name",
         ),
         migrations.RemoveField(
-            model_name='portfoliouser',
-            name='user_email',
+            model_name="portfoliouser",
+            name="user_email",
         ),
         migrations.RemoveField(
-            model_name='portfoliouser',
-            name='user_password',
+            model_name="portfoliouser",
+            name="user_password",
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='is_blogger',
+            model_name="portfoliouser",
+            name="is_blogger",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='portfoliouser',
-            name='user',
-            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="portfoliouser",
+            name="user",
+            field=models.OneToOneField(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
         migrations.DeleteModel(
-            name='BlogUser',
+            name="BlogUser",
         ),
     ]

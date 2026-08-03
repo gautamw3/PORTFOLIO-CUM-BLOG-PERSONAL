@@ -7,13 +7,13 @@ import froala_editor.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0017_alter_clientlead_file_supporting_the_message'),
+        ("portfolio", "0017_alter_clientlead_file_supporting_the_message"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='clientlead',
-            name='message',
+            model_name="clientlead",
+            name="message",
             field=froala_editor.fields.FroalaField(),
         ),
     ]

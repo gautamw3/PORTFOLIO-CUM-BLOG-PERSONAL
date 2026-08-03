@@ -7,23 +7,23 @@ import froala_editor.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0018_alter_clientlead_message'),
+        ("portfolio", "0018_alter_clientlead_message"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='portfoliouser',
-            name='about',
+            model_name="portfoliouser",
+            name="about",
             field=froala_editor.fields.FroalaField(),
         ),
         migrations.AlterField(
-            model_name='review',
-            name='review_description',
+            model_name="review",
+            name="review_description",
             field=froala_editor.fields.FroalaField(),
         ),
         migrations.AlterField(
-            model_name='userskill',
-            name='description',
+            model_name="userskill",
+            name="description",
             field=froala_editor.fields.FroalaField(),
         ),
     ]
