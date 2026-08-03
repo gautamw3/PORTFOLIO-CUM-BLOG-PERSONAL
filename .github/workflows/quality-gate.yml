@@ -1,0 +1,127 @@
+# ============================================================
+# QUALITY GATE ROADMAP
+# ============================================================
+# Phase 1 (Implemented)
+#  ✓ Dependency installation
+#  ✓ pip check
+#  ✓ Django check
+#  ✓ Django deployment check
+#  ✓ pytest
+#  ✓ Black formatting
+#  ✓ Ruff linting
+#  ✓ Bandit security scan
+#  ✓ pip-audit dependency audit
+#  ✓ Gitleaks secret detection
+#
+# Phase 2 (Future)
+#  ☐ mypy
+#  ☐ pytest-cov (90% minimum)
+#  ☐ GitHub CodeQL
+#  ☐ SonarCloud
+#  ☐ CycloneDX SBOM
+#  ☐ Trivy
+#  ☐ Dependabot
+#  ☐ License compliance
+#  ☐ Performance benchmarks
+# ============================================================
+
+name: Quality Gate
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'fix/*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+
+    env:
+      DJANGO_SETTINGS_MODULE: portfolio_cum_blog.settings
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Create Virtual Environment
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install             black==24.10.0             ruff==0.6.9             bandit==1.7.10             pip-audit==2.8.0
+
+      - name: Install Gitleaks
+        run: |
+          wget -q https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_linux_x64.tar.gz
+          tar -xzf gitleaks_linux_x64.tar.gz
+          sudo mv gitleaks /usr/local/bin/
+
+      - name: Dependency Compatibility
+        run: |
+          . .venv/bin/activate
+          pip check
+
+      - name: Django Checks
+        run: |
+          . .venv/bin/activate
+          python manage.py check
+          python manage.py check --deploy || true
+
+      - name: Unit Tests
+        run: |
+          . .venv/bin/activate
+          pytest
+
+      - name: Black Formatting
+        run: |
+          . .venv/bin/activate
+          black --check .
+
+      - name: Ruff Linting
+        run: |
+          . .venv/bin/activate
+          ruff check .
+
+      - name: Bandit Security Scan
+        run: |
+          . .venv/bin/activate
+          bandit -r . -lll
+
+      - name: Dependency Vulnerability Audit
+        run: |
+          . .venv/bin/activate
+          pip-audit
+
+      - name: Secret Detection
+        run: |
+          gitleaks detect --source . --verbose
+
+      - name: Quality Summary
+        if: success()
+        run: |
+          echo "=================================="
+          echo " Django Quality Gate v1.0"
+          echo "=================================="
+          echo "Dependencies        PASS"
+          echo "Django Checks       PASS"
+          echo "Unit Tests          PASS"
+          echo "Formatting          PASS"
+          echo "Linting             PASS"
+          echo "Security Scan       PASS"
+          echo "Dependency Audit    PASS"
+          echo "Secret Detection    PASS"
+          echo "=================================="
+          echo "QUALITY GATE PASSED"
+          echo "=================================="

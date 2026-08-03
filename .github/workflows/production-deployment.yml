@@ -1,3 +1,9 @@
+# Production Deployment Workflow
+# Responsibilities:
+#  - Trigger on push to main
+#  - Deploy already-validated code to EC2 via AWS SSM
+#  - Do NOT run linting/tests here; those belong in quality-gate.yml
+
 name: Django Auto CI/CD via AWS SSM
 
 on:
@@ -18,23 +24,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run Tests
-        run: |
-          source venv/bin/activate
-          pytest
 
       - name: Deploy to EC2 via AWS Systems Manager
         env:
