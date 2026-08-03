@@ -93,10 +93,17 @@ jobs:
           . .venv/bin/activate
           ruff check .
 
-      - name: Bandit Security Scan
+      - name: 🛡️ Bandit Security Scan
         run: |
           . .venv/bin/activate
-          bandit -r . -lll
+
+          bandit \
+            -r \
+            blog \
+            portfolio \
+            portfolio_cum_blog \
+            -f screen \
+            -lll
 
       - name: Dependency Vulnerability Audit
         run: |
