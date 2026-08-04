@@ -12,6 +12,7 @@ A personal portfolio and blog platform built with Django. The project contains a
    - rotating file handler
    - environment-driven log level and log file name
 5. Added structured logging calls in critical request flows (signup/login/contact/profile/detail paths).
+6. Added GitHub Actions-based CI/CD automation with a quality gate workflow for feature and fix branches and an auto-deployment workflow for the `main` branch via AWS SSM.
 
 ## Tech Stack
 
