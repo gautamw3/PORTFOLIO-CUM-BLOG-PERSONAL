@@ -175,62 +175,57 @@ pytest -q
 
 This repository includes a pre-push hook that runs Black in check mode and the test suite before each push.
 
-Enable it once per clone:
+After cloning the repo, enable the hooks once from the repository root:
 
 ```bash
 git config core.hooksPath .githooks
 chmod +x .githooks/pre-push
 ```
 
-After that, every `git push` will stop if formatting or tests fail.
+These commands make Git use the repository-local hook directory for this clone. After that, every `git push` will stop if formatting or tests fail.
 
-## CI/CD Setup and Toggle Guide
+If you ever need to bypass the hook for a one-off push, use:
 
-This repository now uses two workflow modes:
+```bash
+git push --no-verify
+```
 
-1. Manual deploy workflow (always available): [.github/workflows/deploy.yml](.github/workflows/deploy.yml)
-2. Auto deploy on push to `main`: [.github/workflows/deploy-auto.yml](.github/workflows/deploy-auto.yml)
+## CI/CD Setup and Current Workflow Guide
+
+This repository currently uses two GitHub Actions workflows:
+
+1. Quality Gate: [.github/workflows/quality-gate.yml](.github/workflows/quality-gate.yml)
+   - Runs on pushes to `feature/*` and `fix/*` branches
+   - Can also be run manually from the GitHub Actions tab
+   - Validates dependencies, Django checks, tests, formatting, linting, security scans, and secret detection
+
+2. Production Deployment: [.github/workflows/production-deployment.yml](.github/workflows/production-deployment.yml)
+   - Runs automatically on pushes to `main`
+   - Deploys the already-validated code to the EC2 instance through AWS Systems Manager
+   - Does not run tests or linting itself; validation happens in the quality gate workflow first
 
 ### Required GitHub Configuration
 
-Configure these in GitHub before using the deploy workflows:
+Configure these repository secrets in GitHub before using the deployment workflow:
 
 1. Repository Settings > Secrets and variables > Actions > Secrets
-2. Add required secrets:
+2. Add the required secrets:
    - `AWS_ACCESS_KEY_ID`
    - `AWS_SECRET_ACCESS_KEY`
    - `AWS_REGION`
    - `EC2_INSTANCE_ID`
 
-### How to Disable Auto CI/CD (No Run on Push)
+### How to Pause or Stop Auto Deployments
 
-Use this when you want merges/pushes to `main` to produce zero auto deployment workflow runs.
+The current implementation is push-based, so the simplest ways to pause deployment are:
 
-1. Open GitHub Actions tab
-2. Open workflow “Django Auto CI/CD via AWS SSM”
-3. Click `...` (workflow menu)
-4. Click “Disable workflow”
+1. Stop pushing to `main` until you are ready to deploy
+2. Disable the workflow in GitHub Actions if you need to suspend it temporarily
 
-Result:
+### How to Trigger the Quality Checks Manually
 
-1. Push/merge to `main` does not run auto deploy workflow
-2. Manual workflow remains available via “Run workflow”
-
-### How to Re-enable Auto CI/CD
-
-1. Open GitHub Actions tab
-2. Open workflow “Django Auto CI/CD via AWS SSM”
-3. Click “Enable workflow”
-
-Result:
-
-1. Push/merge to `main` triggers automatic test + deploy
-2. Manual workflow is still available
-
-### How to Run Deploy Manually Anytime
-
-1. Open GitHub Actions tab
-2. Select workflow “Django CI/CD via AWS SSM”
+1. Open the GitHub Actions tab
+2. Select the “Quality Gate” workflow
 3. Click “Run workflow”
 
 This works whether auto deploy is enabled or disabled.
