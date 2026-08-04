@@ -25,7 +25,7 @@ A personal portfolio and blog platform built with Django. The project contains a
 ## Repository Layout
 
 ```text
-portfolio_cum_blog/
+PORTFOLIO-CUM-BLOG-PERSONAL/
 ├── blog/
 ├── portfolio/
 ├── portfolio_cum_blog/
@@ -55,8 +55,8 @@ Optional:
 1. Clone and enter project
 
 ```bash
-git clone https://github.com/gautamw3/portfolio_cum_blog.git
-cd portfolio_cum_blog
+git clone https://github.com/gautamw3/PORTFOLIO-CUM-BLOG-PERSONAL.git
+cd PORTFOLIO-CUM-BLOG-PERSONAL
 ```
 
 2. Create and activate virtual environment
