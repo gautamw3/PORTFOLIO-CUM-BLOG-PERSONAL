@@ -1,7 +1,7 @@
 import importlib
 
 from portfolio.constants import SUB_CLIENT_LEAD_EMAIL
-from portfolio.forms import ContactUs
+from portfolio.forms import ContactUs, ReviewInvitationBulkForm, ReviewSubmissionForm
 from portfolio import urls as portfolio_urls
 from portfolio_cum_blog import asgi, storage_backends, urls, wsgi
 
@@ -18,6 +18,18 @@ def test_contact_form_has_expected_fields():
     assert "message" in form.fields
 
 
+def test_review_forms_have_expected_fields():
+    submission_form = ReviewSubmissionForm()
+    assert "reviewer_name" in submission_form.fields
+    assert "reviewer_rating" in submission_form.fields
+    assert "review_description" in submission_form.fields
+
+    bulk_form = ReviewInvitationBulkForm()
+    assert "campaign" in bulk_form.fields
+    assert "message_body" in bulk_form.fields
+    assert "recipients" in bulk_form.fields
+
+
 def test_portfolio_urls_reverse_resolution():
     names = {
         getattr(pattern, "name", None)
@@ -25,6 +37,7 @@ def test_portfolio_urls_reverse_resolution():
         if getattr(pattern, "name", None)
     }
     assert "index" in names
+    assert "write_review" in names
 
 
 def test_project_urls_are_loaded():

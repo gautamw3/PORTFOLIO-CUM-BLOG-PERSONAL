@@ -1,0 +1,121 @@
+{% extends 'portfolio/base_templates/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block pagecontent %}
+
+<section class="banner_area modern-banner review-page-theme">
+  <div class="banner_inner d-flex align-items-center justify-content-center">
+    <div class="container text-center">
+      <div class="banner-panel">
+        <span class="banner-kicker">Backend Tools</span>
+        <h1>Review SMS Campaign</h1>
+        <p class="banner-subtitle">Prepare a bulk message, attach the review link, and send invitations through AWS End User Messaging.</p>
+        <ul class="banner-skill-tags">
+          <li>AWS SMS</li>
+          <li>Bulk Send</li>
+          <li>Trackable Links</li>
+        </ul>
+        <nav class="breadcrumb-wrapper">
+          <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Review SMS</span>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section_gap review-page-theme py-5">
+  <div class="container">
+    {% if response == 'success' %}
+      <div class="review-feedback-box mb-4">
+        <strong>{{ responseMessage }}</strong>
+        <div class="text-muted">{{ responseMessageInfo }}</div>
+      </div>
+    {% elif response == 'error' %}
+      <div class="review-feedback-box mb-4">
+        <strong>{{ responseMessage }}</strong>
+        <div class="text-muted">{{ responseMessageInfo }}</div>
+      </div>
+    {% endif %}
+
+    <div class="review-admin-layout">
+      <div class="review-admin-shell">
+        <div class="review-admin-panel">
+          <h3 class="mb-2">Send review invitations</h3>
+          <p class="text-muted mb-4">Enter recipients one per line. Use <strong>Name, +1234567890</strong> or only the phone number.</p>
+
+          <form method="post" class="review-admin-form-grid">
+            {% csrf_token %}
+            <div>
+              <label for="id_campaign_name" class="font-weight-bold">Campaign name</label>
+              {{ review_sms_form.campaign_name }}
+              {% if review_sms_form.campaign_name.errors %}<small class="text-danger d-block mt-1">{{ review_sms_form.campaign_name.errors|striptags }}</small>{% endif %}
+            </div>
+            <div>
+              <label for="id_message_body" class="font-weight-bold">Message body</label>
+              {{ review_sms_form.message_body }}
+              <small class="text-muted d-block mt-1">Use {name} and {link}. The link will point to the public review page.</small>
+              {% if review_sms_form.message_body.errors %}<small class="text-danger d-block mt-1">{{ review_sms_form.message_body.errors|striptags }}</small>{% endif %}
+            </div>
+            <div>
+              <label for="id_recipients" class="font-weight-bold">Recipients</label>
+              {{ review_sms_form.recipients }}
+              {% if review_sms_form.recipients.errors %}<small class="text-danger d-block mt-1">{{ review_sms_form.recipients.errors|striptags }}</small>{% endif %}
+            </div>
+            <div>
+              <label for="id_default_country_code" class="font-weight-bold">Default country code</label>
+              {{ review_sms_form.default_country_code }}
+              {% if review_sms_form.default_country_code.errors %}<small class="text-danger d-block mt-1">{{ review_sms_form.default_country_code.errors|striptags }}</small>{% endif %}
+            </div>
+            {% if review_sms_form.non_field_errors %}
+              <div class="text-danger">{{ review_sms_form.non_field_errors|striptags }}</div>
+            {% endif %}
+            <div>
+              <button type="submit" class="btn btn-brand px-4">Send Bulk SMS</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <aside class="review-admin-side-card">
+        <h4 class="mb-3">Operational notes</h4>
+        <ul class="review-admin-note-list">
+          <li><i class="fas fa-check-circle"></i><span>This page uses AWS End User Messaging SMS with the approved sender ID when configured.</span></li>
+          <li><i class="fas fa-link"></i><span>Each recipient gets a unique review link so later submissions can be tracked.</span></li>
+          <li><i class="fas fa-cog"></i><span>Sender ID, region, and optional config-set values are controlled through environment settings.</span></li>
+        </ul>
+
+        {% if recent_campaigns %}
+          <div class="mt-4">
+            <h5 class="mb-3">Recent campaigns</h5>
+            <div class="review-admin-results">
+              {% for campaign in recent_campaigns %}
+                <div class="review-admin-result-item">
+                  <span>{{ campaign.name }}</span>
+                  <span>{{ campaign.sent_count }} sent / {{ campaign.failed_count }} failed</span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </aside>
+    </div>
+
+    {% if send_results %}
+      <div class="mt-5 review-admin-shell">
+        <div class="review-admin-panel">
+          <h4 class="mb-3">Campaign results</h4>
+          <div class="review-admin-results">
+            {% for result in send_results %}
+              <div class="review-admin-result-item">
+                <span>{{ result.recipient }}</span>
+                <span>{{ result.status }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

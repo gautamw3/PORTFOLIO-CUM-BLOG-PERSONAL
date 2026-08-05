@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url 'admin:portfolio_reviewcampaign_send_review_invitation' %}" class="addlink">
+      Send Review Invitation
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}

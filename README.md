@@ -13,6 +13,10 @@ A personal portfolio and blog platform built with Django. The project contains a
    - environment-driven log level and log file name
 5. Added structured logging calls in critical request flows (signup/login/contact/profile/detail paths).
 6. Added GitHub Actions-based CI/CD automation with a quality gate workflow for feature and fix branches and an auto-deployment workflow for the `main` branch via AWS SSM.
+7. Implemented customer review collection from frontend with admin approval workflow.
+8. Implemented admin-native bulk SMS review invitations via AWS End User Messaging.
+9. Added campaign-based invitation tracking with per-recipient submission status.
+10. Added active-campaign dropdown based invitation mapping and normalized phone parsing.
 
 ## Tech Stack
 
@@ -127,7 +131,8 @@ python manage.py runserver
 
 ## Logging
 
-Centralized Django logging is configured in `portfolio_cum_blog/settings.py`.
+Centralized Django logging is configured in `portfolio_cum_blog
+/settings.py`.
 
 Handlers:
 
@@ -145,6 +150,98 @@ The application now logs key events for:
 2. profile and detail page rendering failures
 3. contact/client lead workflows
 4. input validation and endpoint misuse (invalid HTTP method / missing params)
+
+## Customer Reviews and SMS Invitations
+
+The site now supports a complete review collection flow:
+
+1. A public review form at `write-review/`
+2. An admin-native bulk SMS sender at
+   `Admin -> Portfolio -> Review Campaigns -> Send Review Invitation`
+3. Admin review moderation (`is_approved`) before reviews are visible on frontend
+4. Campaign-level invitation grouping and recipient-level tracking
+
+### Admin Workflow
+
+1. Create one or more review campaigns in `Review Campaigns`.
+2. Mark campaigns as active (`is_active=True`) to make them selectable.
+3. Open `Send Review Invitation` from Review Campaign list view.
+4. Select one active campaign from dropdown.
+5. Enter one or multiple recipients in one submit.
+6. Submit to send SMS invitations and map recipients to the selected campaign.
+7. Review tracking from campaign detail page (inline invitation rows).
+
+### Recipient Input Format
+
+Use one recipient per line in either format:
+
+1. `Name, +1234567890`
+2. `+1234567890`
+3. `Name, 9876543210`
+
+If local numbers are provided, the selected default country code is appended and
+stored in normalized form.
+
+On the send form, staff select an active campaign from a dropdown and send one or
+many invitations in one action. Invitations are mapped to the selected campaign.
+
+SMS invitations are sent through AWS End User Messaging SMS using the approved sender ID when configured.
+
+### Message Templating
+
+The SMS body supports placeholders:
+
+1. `{name}` for recipient name
+2. `{link}` for personalized review URL
+
+If `{link}` is missing, the system appends the personalized review URL automatically.
+
+### Review Visibility and Approval
+
+1. Customer-submitted reviews are stored as not approved by default.
+2. Only approved reviews are shown on homepage/about testimonial sections.
+3. Approving from list view sets approval metadata.
+4. Approving from detail page also sets `approved_by` and `approved_at`.
+5. Unapproving clears approval metadata.
+
+### Tracking Semantics
+
+Invitation status values:
+
+1. `pending`
+2. `sent`
+3. `failed`
+4. `reviewed`
+
+Campaign counters:
+
+1. `sent_count`
+2. `failed_count`
+3. `submitted` (derived in admin from mapped invitations with submitted reviews)
+
+Additional environment variables:
+
+1. `AWS_REGION`
+2. `AWS_EUM_ORIGINATION_IDENTITY`
+3. `AWS_EUM_CONFIGURATION_SET_NAME`
+4. `AWS_EUM_PROTECT_CONFIGURATION_ID`
+5. `AWS_EUM_DEFAULT_MESSAGE_TYPE`
+6. `REVIEW_INVITATION_DEFAULT_COUNTRY_CODE`
+
+### Data Models Added/Updated
+
+1. `ReviewCampaign` (with `is_active` support)
+2. `ReviewInvitation` (tokenized recipient invitation + SMS tracking)
+3. `Review` updated with moderation fields:
+   - `is_approved`
+   - `approved_by`
+   - `approved_at`
+
+### Notes
+
+1. The invitation sending UX is intentionally centralized under `Review Campaigns`.
+2. Recipient tracking is shown inline under each campaign detail page.
+3. Public review submission is available through `write-review/`.
 
 ## Quality and Verification Commands
 

@@ -60,6 +60,10 @@
 			<a href="{{ tweeter }}" target="_blank" rel="noreferrer" class="mx-2"><i class="fa-brands fa-twitter fa-lg"></i></a>
 			<a href="{{ instagram }}" target="_blank" rel="noreferrer" class="mx-2"><i class="fa-brands fa-instagram fa-lg"></i></a>
 		</div>
+			<div class="footer-review-actions mt-3">
+				<a href="{% url 'write_review' %}" class="footer-review-link mr-2">Write a Review</a>
+				<a href="{% url 'contact_us' %}" class="footer-contact-link">Contact</a>
+			</div>
 		<p class="mb-0">© {% now "Y" %} Gautam Kumar. All rights reserved.</p>
 	</div>
 </footer>
