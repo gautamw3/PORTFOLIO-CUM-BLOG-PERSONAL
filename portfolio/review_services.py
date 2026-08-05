@@ -45,9 +45,7 @@ def send_review_sms(phone_number, message_body):
     if configuration_set:
         request_data["ConfigurationSetName"] = configuration_set
 
-    protect_configuration = getattr(
-        settings, "AWS_EUM_PROTECT_CONFIGURATION_ID", ""
-    )
+    protect_configuration = getattr(settings, "AWS_EUM_PROTECT_CONFIGURATION_ID", "")
     if protect_configuration:
         request_data["ProtectConfigurationId"] = protect_configuration
 

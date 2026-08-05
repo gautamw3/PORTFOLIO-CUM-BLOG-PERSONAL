@@ -302,7 +302,9 @@ def write_review(request):
             else:
                 context["response"] = "error"
                 context["responseMessage"] = "Review submission failed"
-                context["responseMessageInfo"] = "Please correct the highlighted fields."
+                context["responseMessageInfo"] = (
+                    "Please correct the highlighted fields."
+                )
         elif request.method != "GET":
             logger.warning(
                 "Write review endpoint called with invalid HTTP method=%s",

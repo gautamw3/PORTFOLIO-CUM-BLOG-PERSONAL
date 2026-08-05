@@ -121,9 +121,7 @@ class ReviewInvitationBulkForm(forms.Form):
         max_length=8,
         required=False,
         initial=getattr(settings, "REVIEW_INVITATION_DEFAULT_COUNTRY_CODE", "+91"),
-        widget=forms.TextInput(
-            attrs={"placeholder": "+91", "class": "vTextField"}
-        ),
+        widget=forms.TextInput(attrs={"placeholder": "+91", "class": "vTextField"}),
     )
 
     def __init__(self, *args, **kwargs):

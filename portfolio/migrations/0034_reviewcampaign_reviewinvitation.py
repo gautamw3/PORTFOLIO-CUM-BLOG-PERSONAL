@@ -9,50 +9,112 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('portfolio', '0033_alter_skillcategory_category_name'),
+        ("portfolio", "0033_alter_skillcategory_category_name"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ReviewCampaign',
+            name="ReviewCampaign",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=120)),
-                ('message_template', models.TextField()),
-                ('sender_id', models.CharField(blank=True, default='', max_length=20)),
-                ('sent_count', models.PositiveIntegerField(default=0)),
-                ('failed_count', models.PositiveIntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='review_campaigns', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=120)),
+                ("message_template", models.TextField()),
+                ("sender_id", models.CharField(blank=True, default="", max_length=20)),
+                ("sent_count", models.PositiveIntegerField(default=0)),
+                ("failed_count", models.PositiveIntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "created_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="review_campaigns",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Review Campaign',
-                'verbose_name_plural': 'Review Campaigns',
+                "verbose_name": "Review Campaign",
+                "verbose_name_plural": "Review Campaigns",
             },
         ),
         migrations.CreateModel(
-            name='ReviewInvitation',
+            name="ReviewInvitation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipient_name', models.CharField(blank=True, default='', max_length=100)),
-                ('recipient_phone', models.CharField(max_length=20)),
-                ('token', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('review_url', models.URLField(blank=True, default='')),
-                ('sms_message_id', models.CharField(blank=True, default='', max_length=120)),
-                ('sms_status', models.CharField(choices=[('pending', 'Pending'), ('sent', 'Sent'), ('failed', 'Failed'), ('reviewed', 'Reviewed')], default='pending', max_length=20)),
-                ('sms_error', models.TextField(blank=True, default='')),
-                ('sent_at', models.DateTimeField(blank=True, null=True)),
-                ('reviewed_at', models.DateTimeField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('campaign', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='invitations', to='portfolio.reviewcampaign')),
-                ('review', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='invitation', to='portfolio.review')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "recipient_name",
+                    models.CharField(blank=True, default="", max_length=100),
+                ),
+                ("recipient_phone", models.CharField(max_length=20)),
+                (
+                    "token",
+                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+                ),
+                ("review_url", models.URLField(blank=True, default="")),
+                (
+                    "sms_message_id",
+                    models.CharField(blank=True, default="", max_length=120),
+                ),
+                (
+                    "sms_status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("sent", "Sent"),
+                            ("failed", "Failed"),
+                            ("reviewed", "Reviewed"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                ("sms_error", models.TextField(blank=True, default="")),
+                ("sent_at", models.DateTimeField(blank=True, null=True)),
+                ("reviewed_at", models.DateTimeField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "campaign",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="invitations",
+                        to="portfolio.reviewcampaign",
+                    ),
+                ),
+                (
+                    "review",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="invitation",
+                        to="portfolio.review",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Review Invitation',
-                'verbose_name_plural': 'Review Invitations',
+                "verbose_name": "Review Invitation",
+                "verbose_name_plural": "Review Invitations",
             },
         ),
     ]

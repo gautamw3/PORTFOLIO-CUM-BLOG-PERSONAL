@@ -305,9 +305,7 @@ class ReviewInvitation(models.Model):
         related_name="invitation",
     )
     sms_message_id = models.CharField(max_length=120, blank=True, default="")
-    sms_status = models.CharField(
-        max_length=20, choices=SMS_STATUS, default="pending"
-    )
+    sms_status = models.CharField(max_length=20, choices=SMS_STATUS, default="pending")
     sms_error = models.TextField(blank=True, default="")
     sent_at = models.DateTimeField(null=True, blank=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)

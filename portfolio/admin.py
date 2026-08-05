@@ -32,6 +32,8 @@ admin.site.register(SkillCategory)
 admin.site.register(Skill)
 admin.site.register(UserSkill)
 admin.site.register(PortfolioUserSocialMediaLink)
+
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
@@ -142,8 +144,12 @@ class ReviewCampaignAdmin(admin.ModelAdmin):
             if form.is_valid():
                 campaign = form.cleaned_data["campaign"]
                 campaign.message_template = form.cleaned_data["message_body"].strip()
-                campaign.sender_id = getattr(settings, "AWS_EUM_ORIGINATION_IDENTITY", "")
-                campaign.save(update_fields=["message_template", "sender_id", "updated_at"])
+                campaign.sender_id = getattr(
+                    settings, "AWS_EUM_ORIGINATION_IDENTITY", ""
+                )
+                campaign.save(
+                    update_fields=["message_template", "sender_id", "updated_at"]
+                )
 
                 sent_count = 0
                 failed_count = 0
@@ -195,7 +201,9 @@ class ReviewCampaignAdmin(admin.ModelAdmin):
 
                 campaign.sent_count += sent_count
                 campaign.failed_count += failed_count
-                campaign.save(update_fields=["sent_count", "failed_count", "updated_at"])
+                campaign.save(
+                    update_fields=["sent_count", "failed_count", "updated_at"]
+                )
                 self.message_user(
                     request,
                     f"Campaign processed. Sent: {sent_count}, Failed: {failed_count}.",
