@@ -209,6 +209,21 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 APPLICATION_EMAIL = os.environ.get("APPLICATION_EMAIL")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
+AWS_REGION = os.environ.get("AWS_REGION")
+AWS_EUM_ORIGINATION_IDENTITY = os.environ.get("AWS_EUM_ORIGINATION_IDENTITY", "")
+AWS_EUM_CONFIGURATION_SET_NAME = os.environ.get(
+    "AWS_EUM_CONFIGURATION_SET_NAME", ""
+)
+AWS_EUM_PROTECT_CONFIGURATION_ID = os.environ.get(
+    "AWS_EUM_PROTECT_CONFIGURATION_ID", ""
+)
+AWS_EUM_DEFAULT_MESSAGE_TYPE = os.environ.get(
+    "AWS_EUM_DEFAULT_MESSAGE_TYPE", "TRANSACTIONAL"
+)
+REVIEW_INVITATION_DEFAULT_COUNTRY_CODE = os.environ.get(
+    "REVIEW_INVITATION_DEFAULT_COUNTRY_CODE", "+91"
+)
+
 customColorPalette = [
     {"color": "hsl(4, 90%, 58%)", "label": "Red"},
     {"color": "hsl(340, 82%, 52%)", "label": "Pink"},

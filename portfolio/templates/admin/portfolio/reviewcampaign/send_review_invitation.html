@@ -1,0 +1,124 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .send-review-wrap {
+      max-width: 920px;
+    }
+
+    .send-review-wrap .module {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .send-review-help {
+      margin: 0 0 16px;
+      color: var(--body-quiet-color);
+    }
+
+    .send-review-empty {
+      padding: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--darkened-bg);
+      margin-bottom: 16px;
+    }
+
+    .send-review-wrap textarea,
+    .send-review-wrap select,
+    .send-review-wrap input[type="text"] {
+      width: min(100%, 720px);
+      box-sizing: border-box;
+    }
+
+    .send-review-form .form-row {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--hairline-color);
+    }
+
+    .send-review-form .form-row:last-child {
+      border-bottom: 0;
+    }
+
+    .send-review-form .form-row label {
+      margin: 8px 0 0;
+      font-weight: 600;
+    }
+
+    .send-review-form .field-body {
+      min-width: 0;
+    }
+
+    .send-review-form .errorlist {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .send-review-form .help {
+      margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .send-review-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .send-review-form .form-row label {
+        margin-top: 0;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main" class="send-review-wrap">
+    <h1>Send Review Invitation</h1>
+    <p class="send-review-help">Select an active campaign, add one or more recipients, and send. The personalized review link is appended automatically.</p>
+
+    {% if not has_active_campaigns %}
+      <div class="send-review-empty">
+        No active campaigns found. Please create a campaign in <strong>Review Campaigns</strong> and mark it active.
+      </div>
+    {% endif %}
+
+    <form method="post" novalidate class="send-review-form">
+      {% csrf_token %}
+      <fieldset class="module aligned">
+        {% if form.non_field_errors %}
+          <div class="errornote">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        {% for field in form %}
+          <div class="form-row field-{{ field.name }}{% if field.errors %} errors{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            <div class="field-body">
+              {{ field }}
+              {% if field.help_text %}
+                <div class="help">{{ field.help_text }}</div>
+              {% endif %}
+              {% if field.errors %}
+                <ul class="errorlist">
+                  {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </fieldset>
+      <div class="submit-row">
+        <input type="submit" class="default" value="Send Invitations" {% if not has_active_campaigns %}disabled{% endif %}>
+        <a href="{% url 'admin:portfolio_reviewcampaign_changelist' %}" class="button cancel-link">Back</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

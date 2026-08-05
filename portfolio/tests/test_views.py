@@ -15,6 +15,8 @@ from portfolio.models import (
     PortfolioUserSocialMediaLink,
     Resume,
     Review,
+    ReviewCampaign,
+    ReviewInvitation,
     Skill,
     SkillCategory,
     UserSkill,
@@ -43,6 +45,8 @@ def data_setup(db, monkeypatch):
         first_name="Base",
         last_name="User",
     )
+    user.is_staff = True
+    user.save(update_fields=["is_staff"])
     portfolio_user = PortfolioUser.objects.create(
         user=user,
         role="Developer",
@@ -89,6 +93,7 @@ def data_setup(db, monkeypatch):
         reviewer_name="Jane",
         reviewer_rating="5",
         review_description="Great work",
+        is_approved=True,
     )
     Resume.objects.create(
         user=portfolio_user,
@@ -312,3 +317,39 @@ def test_get_global_user_with_anonymous_request(rf, rendered, data_setup):
 
     result = views.index(request)
     assert result["template"] == "portfolio/index.html"
+
+
+@pytest.mark.django_db
+def test_write_review_view_get_and_post(rf, rendered, data_setup):
+    campaign = ReviewCampaign.objects.create(
+        name="SMS Campaign",
+        message_template="Hi {name}, please review: {link}",
+        created_by=data_setup.user,
+    )
+    invitation = ReviewInvitation.objects.create(
+        campaign=campaign,
+        recipient_name="Jane",
+        recipient_phone="+15555550123",
+    )
+
+    get_request = rf.get(f"/write-review/?token={invitation.token}")
+    get_request.user = data_setup.user
+    get_result = views.write_review(get_request)
+    assert get_result["template"] == "portfolio/write_review.html"
+    assert get_result["context"]["review_invitation"].id == invitation.id
+
+    post_request = rf.post(
+        "/write-review/",
+        {
+            "token": str(invitation.token),
+            "reviewer_name": "Jane Doe",
+            "reviewer_rating": "5",
+            "review_description": "Great experience.",
+        },
+    )
+    post_request.user = data_setup.user
+    post_result = views.write_review(post_request)
+    assert post_result["context"]["response"] == "success"
+    invitation.refresh_from_db()
+    assert invitation.sms_status == "reviewed"
+    assert invitation.review is not None

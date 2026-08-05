@@ -1,0 +1,111 @@
+{% extends 'portfolio/base_templates/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block pagecontent %}
+
+<section class="banner_area modern-banner review-page-theme">
+  <div class="banner_inner d-flex align-items-center justify-content-center">
+    <div class="container text-center">
+      <div class="banner-panel">
+        <span class="banner-kicker">Customer Feedback</span>
+        <h1>Write a Review</h1>
+        <p class="banner-subtitle">Share your experience in a few lines and help future clients understand the quality of work.</p>
+        <ul class="banner-skill-tags">
+          <li>Fast</li>
+          <li>Simple</li>
+          <li>Mobile Friendly</li>
+        </ul>
+        <nav class="breadcrumb-wrapper">
+          <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Write a Review</span>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section_gap review-page-theme py-5">
+  <div class="container">
+    {% if review_invitation %}
+      <div class="review-badge mb-4">
+        <i class="fas fa-check-circle"></i>
+        Personal invitation detected for {{ review_invitation.recipient_name|default:review_invitation.recipient_phone }}
+      </div>
+    {% endif %}
+
+    {% if response == 'success' %}
+      <div class="review-feedback-box mb-4">
+        <strong>{{ responseMessage }}</strong>
+        <div class="text-muted">{{ responseMessageInfo }}</div>
+      </div>
+    {% elif response == 'error' %}
+      <div class="review-feedback-box mb-4">
+        <strong>{{ responseMessage }}</strong>
+        <div class="text-muted">{{ responseMessageInfo }}</div>
+      </div>
+    {% endif %}
+
+    <div class="review-landing-layout">
+      <div class="review-landing-shell">
+        <div class="review-landing-panel">
+          <h3 class="mb-2">Tell us how it went</h3>
+          <p class="text-muted mb-4">Your honest feedback helps strengthen the portfolio and improve future collaborations.</p>
+
+          <form method="post" class="review-form-grid">
+            {% csrf_token %}
+            {{ review_form.token }}
+            <div>
+              <label for="id_reviewer_name" class="font-weight-bold">Your name</label>
+              {{ review_form.reviewer_name }}
+              {% if review_form.reviewer_name.errors %}<small class="text-danger d-block mt-1">{{ review_form.reviewer_name.errors|striptags }}</small>{% endif %}
+            </div>
+            <div>
+              <label for="id_reviewer_rating" class="font-weight-bold">Rating</label>
+              {{ review_form.reviewer_rating }}
+              {% if review_form.reviewer_rating.errors %}<small class="text-danger d-block mt-1">{{ review_form.reviewer_rating.errors|striptags }}</small>{% endif %}
+            </div>
+            <div>
+              <label for="id_review_description" class="font-weight-bold">Review</label>
+              {{ review_form.review_description }}
+              {% if review_form.review_description.errors %}<small class="text-danger d-block mt-1">{{ review_form.review_description.errors|striptags }}</small>{% endif %}
+            </div>
+            {% if review_form.non_field_errors %}
+              <div class="text-danger">{{ review_form.non_field_errors|striptags }}</div>
+            {% endif %}
+            <div>
+              <button type="submit" class="btn btn-brand px-4">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <aside class="review-side-card">
+        <h4 class="mb-3">What happens next</h4>
+        <ul class="review-note-list">
+          <li><i class="fas fa-bolt"></i><span>The review goes straight into the customer review feed after submission.</span></li>
+          <li><i class="fas fa-mobile-alt"></i><span>If you came from an SMS link, your invitation can be tracked by the sender.</span></li>
+          <li><i class="fas fa-shield-alt"></i><span>There is no header clutter, so the page stays focused on the review task.</span></li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="mt-5">
+      <div class="d-flex align-items-end justify-content-between flex-wrap mb-4" style="gap:12px;">
+        <div>
+          <h3 class="mb-1">Recent customer reviews</h3>
+          <p class="text-muted mb-0">A small sample of what others have said recently.</p>
+        </div>
+      </div>
+
+      <div class="review-feed-grid">
+        {% for each_review in customer_reviews %}
+          <div class="review-feed-card">
+            <p class="mb-2">“{{ each_review.description|striptags }}”</p>
+            <div class="review-feed-author">— {{ each_review.reviewer }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

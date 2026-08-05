@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import urlencode
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -7,11 +8,13 @@ from django.db import DatabaseError
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
+from django.urls import reverse
+from django.utils import timezone
 
 from portfolio_cum_blog import settings
 
 from .constants import SUB_CLIENT_LEAD_EMAIL
-from .forms import ContactUs
+from .forms import ContactUs, ReviewSubmissionForm
 from .models import (
     ClientProject,
     NewClient,
@@ -20,6 +23,7 @@ from .models import (
     PortfolioUserSocialMediaLink,
     Resume,
     Review,
+    ReviewInvitation,
     UserSkill,
 )
 
@@ -132,9 +136,7 @@ def get_user_skills(user_id):
 
 def get_customer_reviews():
     """Fetch five random customer reviews for homepage/testimonial sections."""
-    obj_customer_reviews = Review.objects.raw(
-        "SELECT * FROM portfolio_review ORDER BY RANDOM() LIMIT 5;"
-    )
+    obj_customer_reviews = Review.objects.filter(is_approved=True).order_by("?")[:5]
     customer_reviews = []
     for each_review in obj_customer_reviews:
         customer_review = {
@@ -146,6 +148,27 @@ def get_customer_reviews():
         }
         customer_reviews.append(customer_review)
     return customer_reviews
+
+
+def get_review_invitation_by_token(token_value):
+    """Resolve an invitation record from the token query string."""
+    if not token_value:
+        return None
+    try:
+        return ReviewInvitation.objects.select_related("campaign").get(
+            token=token_value
+        )
+    except ReviewInvitation.DoesNotExist:
+        logger.info("No review invitation found for token=%s", token_value)
+        return None
+
+
+def build_public_review_link(request, token_value=None):
+    """Create the public review URL, with an optional token query string."""
+    review_link = request.build_absolute_uri(reverse("write_review"))
+    if token_value:
+        review_link = f"{review_link}?{urlencode({'token': token_value})}"
+    return review_link
 
 
 def get_social_media_links(portfolio_user_id):
@@ -225,6 +248,74 @@ def index(request):
     except (ObjectDoesNotExist, AttributeError, TypeError, ValueError) as err:
         logger.exception("Failed to render index page")
         context = {"page_title": "Home", "exception": err.__str__()}
+    return render(request, template, context)
+
+
+def write_review(request):
+    """Render the public review form and store a customer review submission."""
+    template = "portfolio/write_review.html"
+    token_value = request.GET.get("token") or request.POST.get("token")
+    invitation = get_review_invitation_by_token(token_value)
+    review_form = ReviewSubmissionForm(
+        initial={
+            "token": token_value or "",
+            "reviewer_name": invitation.recipient_name if invitation else "",
+        }
+    )
+    context = {
+        "page_title": "Write a Review",
+        "review_form": review_form,
+        "review_invitation": invitation,
+        "customer_reviews": get_customer_reviews(),
+    }
+    try:
+        if request.method == "POST":
+            review_form = ReviewSubmissionForm(request.POST)
+            context["review_form"] = review_form
+            if review_form.is_valid():
+                review = Review.objects.create(
+                    reviewer_name=review_form.cleaned_data["reviewer_name"].strip(),
+                    reviewer_rating=review_form.cleaned_data["reviewer_rating"],
+                    review_description=review_form.cleaned_data["review_description"],
+                )
+                if invitation is not None:
+                    invitation.review = review
+                    invitation.sms_status = "reviewed"
+                    invitation.reviewed_at = timezone.now()
+                    invitation.save(
+                        update_fields=[
+                            "review",
+                            "sms_status",
+                            "reviewed_at",
+                            "updated_at",
+                        ]
+                    )
+                context["response"] = "success"
+                context["responseMessage"] = "Thank you for sharing your review."
+                context["responseMessageInfo"] = (
+                    "Your feedback was received and will be published after admin approval."
+                )
+                logger.info(
+                    "Customer review submitted for reviewer=%s",
+                    review.reviewer_name,
+                )
+            else:
+                context["response"] = "error"
+                context["responseMessage"] = "Review submission failed"
+                context["responseMessageInfo"] = "Please correct the highlighted fields."
+        elif request.method != "GET":
+            logger.warning(
+                "Write review endpoint called with invalid HTTP method=%s",
+                request.method,
+            )
+            context["response"] = "error"
+            context["responseMessage"] = "Review submission failed"
+            context["responseMessageInfo"] = f"Invalid HTTP method {request.method}"
+    except (ValidationError, DatabaseError, TypeError, ValueError) as err:
+        logger.exception("Failed to process review submission")
+        context["response"] = "error"
+        context["responseMessage"] = "Review submission failed"
+        context["responseMessageInfo"] = err.__str__()
     return render(request, template, context)
 
 

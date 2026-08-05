@@ -8,6 +8,8 @@ from portfolio.models import (
     PortfolioUser,
     PortfolioUserAddress,
     PortfolioUserSocialMediaLink,
+    ReviewCampaign,
+    ReviewInvitation,
     Review,
     Skill,
     SkillCategory,
@@ -161,6 +163,39 @@ def test_review():
     )
     assert review.reviewer_name == "John Doe"
     assert review.reviewer_rating == "5"
+
+
+@pytest.mark.django_db
+def test_review_campaign_and_invitation():
+    user = User.objects.create(
+        username="campaignuser",
+        first_name="Campaign",
+        last_name="User",
+        email="campaign@example.com",
+    )
+    review = Review.objects.create(
+        reviewer_name="John Doe",
+        reviewer_rating="5",
+        review_description="Excellent service and support!",
+    )
+    campaign = ReviewCampaign.objects.create(
+        name="Launch Campaign",
+        message_template="Hi {name}, please review: {link}",
+        sender_id="ACME",
+        created_by=user,
+    )
+    invitation = ReviewInvitation.objects.create(
+        campaign=campaign,
+        recipient_name="John",
+        recipient_phone="+15555550100",
+        review=review,
+        review_url="https://example.com/write-review/?token=abc",
+        sms_status="sent",
+    )
+
+    assert invitation.campaign == campaign
+    assert invitation.review == review
+    assert invitation.sms_status == "sent"
 
 
 @pytest.mark.django_db

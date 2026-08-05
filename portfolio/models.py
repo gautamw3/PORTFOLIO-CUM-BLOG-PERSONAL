@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
@@ -225,6 +227,15 @@ class Review(models.Model):
         max_length=1, null=False, blank=False, choices=UserSkill.STAR_RATINGS
     )
     review_description = CKEditor5Field(null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="approved_reviews",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -234,6 +245,82 @@ class Review(models.Model):
     class Meta:
         verbose_name = "Customer Review"
         verbose_name_plural = "Customer Reviews"
+
+
+class ReviewCampaign(models.Model):
+    """
+    Stores a bulk review request campaign sent through SMS.
+    """
+
+    name = models.CharField(max_length=120, null=False, blank=False)
+    is_active = models.BooleanField(default=True)
+    message_template = models.TextField(null=False, blank=False)
+    sender_id = models.CharField(max_length=20, blank=True, default="")
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="review_campaigns",
+    )
+    sent_count = models.PositiveIntegerField(default=0)
+    failed_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Review Campaign"
+        verbose_name_plural = "Review Campaigns"
+
+
+class ReviewInvitation(models.Model):
+    """
+    Stores the individual recipient links for a review campaign.
+    """
+
+    SMS_STATUS = (
+        ("pending", "Pending"),
+        ("sent", "Sent"),
+        ("failed", "Failed"),
+        ("reviewed", "Reviewed"),
+    )
+
+    campaign = models.ForeignKey(
+        ReviewCampaign,
+        on_delete=models.CASCADE,
+        related_name="invitations",
+    )
+    recipient_name = models.CharField(max_length=100, blank=True, default="")
+    recipient_phone = models.CharField(max_length=20, null=False, blank=False)
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    review_url = models.URLField(blank=True, default="")
+    review = models.OneToOneField(
+        Review,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="invitation",
+    )
+    sms_message_id = models.CharField(max_length=120, blank=True, default="")
+    sms_status = models.CharField(
+        max_length=20, choices=SMS_STATUS, default="pending"
+    )
+    sms_error = models.TextField(blank=True, default="")
+    sent_at = models.DateTimeField(null=True, blank=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        recipient = self.recipient_name or self.recipient_phone
+        return f"{self.campaign.name} | {recipient}"
+
+    class Meta:
+        verbose_name = "Review Invitation"
+        verbose_name_plural = "Review Invitations"
 
 
 class NewClient(models.Model):

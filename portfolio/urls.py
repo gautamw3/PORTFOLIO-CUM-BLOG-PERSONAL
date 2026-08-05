@@ -18,6 +18,7 @@ urlpatterns = [
     path("new_client_feed/", portfolio_view.new_client_feed, name="new_client_feed"),
     path("contact_us/", portfolio_view.contact_us, name="contact_us"),
     path("about_me/", portfolio_view.about_me, name="about_me"),
+    path("write-review/", portfolio_view.write_review, name="write_review"),
     path("user_portfolio/", portfolio_view.user_portfolio, name="user_portfolio"),
     path(
         "user_profile_details/",

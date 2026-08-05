@@ -200,7 +200,13 @@
   <section class="section-wrap pt-0">
     <div class="container">
       <div class="section-head mb-4">
-        <h2>Client Testimonials</h2>
+        <div class="d-flex align-items-end justify-content-between flex-wrap" style="gap:12px;">
+          <div>
+            <h2>Client Testimonials</h2>
+            <p>Trusted words from clients who have worked closely on real delivery outcomes.</p>
+          </div>
+          <a href="{% url 'write_review' %}" class="review-cta-link">Write a Review</a>
+        </div>
       </div>
       <div class="row">
         {% for each_review in customer_reviews %}
